@@ -7,29 +7,37 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.catsgallery.databinding.GridViewItemBinding
 
-class PhotoGridAdapter( val onClickListener: OnClickListener ) :
-    ListAdapter<MarsProperty, PhotoGridAdapter.MarsPropertyViewHolder>(DiffCallback) {
+class PhotoGridAdapter(val onClickListener: OnClickListener) :
+    ListAdapter<TheCatSearchResponseItem, PhotoGridAdapter.MarsPropertyViewHolder>(DiffCallback) {
 
-    class MarsPropertyViewHolder(private var binding: GridViewItemBinding):
+    class MarsPropertyViewHolder(private var binding: GridViewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(marsProperty: MarsProperty) {
-            binding.property = marsProperty
+        fun bind(theCatSearchResponseItem: TheCatSearchResponseItem) {
+            binding.property = theCatSearchResponseItem
             binding.executePendingBindings()
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<MarsProperty>() {
-        override fun areItemsTheSame(oldItem: MarsProperty, newItem: MarsProperty): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<TheCatSearchResponseItem>() {
+        override fun areItemsTheSame(
+            oldItem: TheCatSearchResponseItem,
+            newItem: TheCatSearchResponseItem
+        ): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: MarsProperty, newItem: MarsProperty): Boolean {
+        override fun areContentsTheSame(
+            oldItem: TheCatSearchResponseItem,
+            newItem: TheCatSearchResponseItem
+        ): Boolean {
             return oldItem.id == newItem.id
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): MarsPropertyViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): MarsPropertyViewHolder {
         return MarsPropertyViewHolder(GridViewItemBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
@@ -41,7 +49,8 @@ class PhotoGridAdapter( val onClickListener: OnClickListener ) :
         holder.bind(marsProperty)
     }
 
-    class OnClickListener(val clickListener: (marsProperty:MarsProperty) -> Unit) {
-        fun onClick(marsProperty:MarsProperty) = clickListener(marsProperty)
+    class OnClickListener(val clickListener: (theCatSearchResponseItem: TheCatSearchResponseItem) -> Unit) {
+        fun onClick(theCatSearchResponseItem: TheCatSearchResponseItem) =
+            clickListener(theCatSearchResponseItem)
     }
 }

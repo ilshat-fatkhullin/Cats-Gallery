@@ -7,15 +7,15 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.catsgallery.network.MarsProperty
+import com.example.catsgallery.network.TheCatSearchResponseItem
 import com.example.catsgallery.network.PhotoGridAdapter
-import com.example.catsgallery.overview.MarsApiStatus
+import com.example.catsgallery.overview.TheCatsApiStatus
 
 /**
  * When there is no Mars property data (data is null), hide the [RecyclerView], otherwise show it.
  */
 @BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView, data: List<MarsProperty>?) {
+fun bindRecyclerView(recyclerView: RecyclerView, data: List<TheCatSearchResponseItem>?) {
     val adapter = recyclerView.adapter as PhotoGridAdapter
     adapter.submitList(data)
 }
@@ -37,17 +37,17 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 }
 
 @BindingAdapter("marsApiStatus")
-fun bindStatus(statusImageView: ImageView, status: MarsApiStatus?) {
+fun bindStatus(statusImageView: ImageView, status: TheCatsApiStatus?) {
     when (status) {
-        MarsApiStatus.LOADING -> {
+        TheCatsApiStatus.LOADING -> {
             statusImageView.visibility = View.VISIBLE
             statusImageView.setImageResource(R.drawable.loading_animation)
         }
-        MarsApiStatus.ERROR -> {
+        TheCatsApiStatus.ERROR -> {
             statusImageView.visibility = View.VISIBLE
             statusImageView.setImageResource(R.drawable.ic_connection_error)
         }
-        MarsApiStatus.DONE -> {
+        TheCatsApiStatus.DONE -> {
             statusImageView.visibility = View.GONE
         }
     }
