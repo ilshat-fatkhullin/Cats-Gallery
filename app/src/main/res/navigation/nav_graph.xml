@@ -8,18 +8,21 @@
     <fragment
         android:id="@+id/overviewFragment"
         android:name="com.example.catsgallery.overview.OverviewFragment"
-        android:label="OverviewFragment" >
+        android:label="fragment_overview"
+        tools:layout="@layout/fragment_overview" >
         <action
-            android:id="@+id/action_overviewFragment_to_detailFragment"
+            android:id="@+id/action_showDetail"
             app:destination="@id/detailFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.catsgallery.detail.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" >
-        <action
-            android:id="@+id/action_detailFragment_to_overviewFragment"
-            app:destination="@id/overviewFragment" />
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="selectedProperty"
+            app:argType="com.example.catsgallery.network.TheCatSearchResponseItem"
+            />
     </fragment>
 </navigation>

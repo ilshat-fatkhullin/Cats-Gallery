@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.catsgallery.databinding.FragmentOverviewBinding
 
@@ -27,7 +30,8 @@ class OverviewFragment : Fragment() {
         binding.viewModel = viewModel
         binding.searchViewItems.adapter =
             SearchViewItemsAdapter(SearchViewItemsAdapter.OnClickListener {
-                //viewModel.displayPropertyDetails(it)
+                viewModel.addSelectedCategory(it)
+                binding.searchView.clearFocus()
             })
         binding.searchView.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
@@ -45,6 +49,10 @@ class OverviewFragment : Fragment() {
                 viewModel.setSearchViewFocus(p1)
             }
         })
+        binding.tagViewItems.adapter =
+            TagViewItemsAdapter(TagViewItemsAdapter.OnClickListener {
+                viewModel.deleteSelectedCategory(it)
+            })
         binding.photosGrid.adapter =
             PhotoGridAdapter(PhotoGridAdapter.OnClickListener {
                 viewModel.displayPropertyDetails(it)
@@ -59,6 +67,14 @@ class OverviewFragment : Fragment() {
                         viewModel.onScrolledUntilEnd()
                     }
                 }
+            }
+        })
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
+            if ( null != it ) {
+                // Must find the NavController from the Fragment
+                this.findNavController().navigate(OverviewFragmentDirections.actionShowDetail(it))
+                // Tell the ViewModel we've made the navigate call to prevent multiple navigation
+                viewModel.displayPropertyDetailsComplete()
             }
         })
 

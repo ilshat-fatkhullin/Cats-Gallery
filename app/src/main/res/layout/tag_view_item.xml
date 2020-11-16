@@ -9,22 +9,32 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/search_view_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:background="@color/colorCardBackground">
+        android:background="@color/colorTagBackground">
 
         <TextView
             android:id="@+id/search_text_view"
             android:gravity="center_vertical"
             android:padding="@dimen/search_view_item_padding"
             android:text="@{property.name}"
-            android:textColor="@color/colorPrimaryText"
-            android:layout_width="match_parent"
+            android:textColor="@color/colorSecondaryText"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="@dimen/close_button_size"
+            android:layout_height="@dimen/close_button_size"
+            android:background="@android:color/transparent"
+            android:text="@string/x"
+            android:textColor="@color/colorSecondaryText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

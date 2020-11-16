@@ -11,6 +11,7 @@ import com.example.catsgallery.network.TheCatCategoryResponseItem
 import com.example.catsgallery.network.TheCatSearchResponseItem
 import com.example.catsgallery.overview.PhotoGridAdapter
 import com.example.catsgallery.overview.SearchViewItemsAdapter
+import com.example.catsgallery.overview.TagViewItemsAdapter
 import com.example.catsgallery.overview.TheCatsApiStatus
 
 @BindingAdapter("searchListData")
@@ -24,6 +25,13 @@ fun bindCategoryRecyclerView(recyclerView: RecyclerView, data: List<TheCatCatego
     val adapter = recyclerView.adapter as SearchViewItemsAdapter
     adapter.submitList(data)
 }
+
+@BindingAdapter("tagListData")
+fun bindTagRecyclerView(recyclerView: RecyclerView, data: List<TheCatCategoryResponseItem>?) {
+    val adapter = recyclerView.adapter as TagViewItemsAdapter
+    adapter.submitList(data)
+}
+
 
 /**
  * Uses the Glide library to load an image by URL into an [ImageView]
@@ -41,7 +49,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 }
 
-@BindingAdapter("marsApiStatus")
+@BindingAdapter("theCatApiStatus")
 fun bindStatus(statusImageView: ImageView, status: TheCatsApiStatus?) {
     when (status) {
         TheCatsApiStatus.LOADING -> {

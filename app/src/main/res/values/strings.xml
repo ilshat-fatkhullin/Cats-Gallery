@@ -2,4 +2,5 @@
     <string name="app_name">CatsGallery</string>
     <string name="image">Image</string>
     <string name="api_key">bcfcd03c-8c1b-4a80-ab12-9e610d1b1720</string>
+    <string name="x">X</string>
 </resources>

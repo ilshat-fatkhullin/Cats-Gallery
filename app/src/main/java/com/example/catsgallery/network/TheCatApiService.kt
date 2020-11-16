@@ -23,7 +23,7 @@ interface TheCatApiService {
     suspend fun getSearchItems(@Query("api_key") apiKey: String,
                                @Query("page") page: Int,
                                @Query("limit") limit: Int,
-                               @Query("category_ids") categoryIds: List<Int>): List<TheCatSearchResponseItem>
+                               @Query("category_ids") categoryIds: String): List<TheCatSearchResponseItem>
 
     @GET("categories")
     suspend fun getCategories(): List<TheCatCategoryResponseItem>

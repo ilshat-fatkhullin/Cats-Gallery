@@ -2,4 +2,5 @@
 <resources>
     <dimen name="search_view_height">60dp</dimen>
     <dimen name="search_view_item_padding">10dp</dimen>
+    <dimen name="close_button_size">40dp</dimen>
 </resources>

@@ -24,6 +24,22 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tag_view_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_view"
+            app:tagListData="@{viewModel.selectedCategories}"
+            app:spanCount="2"
+            tools:itemCount="16"
+            tools:listitem="@layout/tag_view_item" />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/photos_grid"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -33,7 +49,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_view"
+            app:layout_constraintTop_toBottomOf="@+id/tag_view_items"
             app:searchListData="@{viewModel.searchItems}"
             app:spanCount="2"
             tools:itemCount="16"
@@ -59,7 +75,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:marsApiStatus="@{viewModel.searchItemsLoadingStatus}"
+            app:theCatApiStatus="@{viewModel.searchItemsLoadingStatus}"
             android:contentDescription="@string/image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

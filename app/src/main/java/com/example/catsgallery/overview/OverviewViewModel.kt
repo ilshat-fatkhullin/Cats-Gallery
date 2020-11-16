@@ -9,6 +9,7 @@ import com.example.catsgallery.network.TheCatCategoryResponseItem
 import com.example.catsgallery.network.TheCatSearchResponseItem
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 enum class TheCatsApiStatus { LOADING, ERROR, DONE }
 
@@ -52,16 +53,30 @@ class OverviewViewModel : ViewModel() {
 
     private val _filteredCategoryItems = MutableLiveData<List<TheCatCategoryResponseItem>>()
 
-    private val _selectedCategories = MutableLiveData<List<Int>>()
-
     val filteredCategoryItems: LiveData<List<TheCatCategoryResponseItem>>
         get() = _filteredCategoryItems
+
+    private val _selectedCategories = MutableLiveData<List<TheCatCategoryResponseItem>>()
+
+    val selectedCategories: LiveData<List<TheCatCategoryResponseItem>>
+        get() = _selectedCategories
 
     init {
         _apiKey.value = "bcfcd03c-8c1b-4a80-ab12-9e610d1b1720"
         _limit.value = 25
-        updateFilter(ArrayList())
+        _selectedCategories.value = ArrayList()
+        resetSearchItems()
         loadCategories()
+    }
+
+    private fun resetSearchItems() {
+        _page.value = 0
+        _searchItems.value = ArrayList()
+        _searchItemsLoadingStatus.value = TheCatsApiStatus.DONE
+        if (_imageLoadingJob.value != null) {
+            _imageLoadingJob.value!!.cancel()
+        }
+        loadMorePhotos()
     }
 
     private fun loadMorePhotos() {
@@ -72,7 +87,14 @@ class OverviewViewModel : ViewModel() {
             _searchItemsLoadingStatus.value = TheCatsApiStatus.LOADING
             try {
                 val result = ArrayList<TheCatSearchResponseItem>(_searchItems.value!!)
-                result.addAll(TheCatApi.retrofitService.getSearchItems(_apiKey.value.orEmpty(), _page.value!!, _limit.value!!, _selectedCategories.value!!))
+                result.addAll(
+                    TheCatApi.retrofitService.getSearchItems(
+                        _apiKey.value.orEmpty(),
+                        _page.value!!,
+                        _limit.value!!,
+                        getSelectedCategoryIds()
+                    )
+                )
                 _searchItems.value = result
                 _searchItemsLoadingStatus.value = TheCatsApiStatus.DONE
                 _page.value = _page.value!! + 1
@@ -106,9 +128,8 @@ class OverviewViewModel : ViewModel() {
         }
 
         val filteredList = ArrayList<TheCatCategoryResponseItem>()
-        for (c in _categoryItems.value!!)
-        {
-            if (!c.name.contains(_searchText.value.orEmpty(), true))
+        for (c in _categoryItems.value!!) {
+            if (!c.name.startsWith(_searchText.value.orEmpty(), true))
                 continue
             filteredList.add(c)
         }
@@ -116,15 +137,18 @@ class OverviewViewModel : ViewModel() {
         _filteredCategoryItems.value = filteredList
     }
 
-    private fun updateFilter(categories: ArrayList<Int>) {
-        _page.value = 0
-        _searchItems.value = ArrayList()
-        _selectedCategories.value = categories
-        _searchItemsLoadingStatus.value = TheCatsApiStatus.DONE
-        if (_imageLoadingJob.value != null) {
-            _imageLoadingJob.value!!.cancel()
+    private fun getSelectedCategoryIds(): String {
+        val result = StringBuilder()
+        if (_selectedCategories.value == null) {
+            return ""
         }
-        loadMorePhotos()
+        for (i in 0 until _selectedCategories.value!!.count()) {
+            result.append(_selectedCategories.value!![i].id)
+            if (i < _selectedCategories.value!!.count() - 1) {
+                result.append(',')
+            }
+        }
+        return result.toString()
     }
 
     fun displayPropertyDetails(theCatSearchResponseItem: TheCatSearchResponseItem) {
@@ -146,5 +170,25 @@ class OverviewViewModel : ViewModel() {
 
     fun setSearchViewFocus(value: Boolean) {
         _isSearchViewInFocus.value = value
+    }
+
+    fun addSelectedCategory(value: TheCatCategoryResponseItem) {
+        val result = ArrayList(_selectedCategories.value!!)
+        result.add(value)
+        _selectedCategories.value = result
+        resetSearchItems()
+    }
+
+    fun deleteSelectedCategory(value: TheCatCategoryResponseItem) {
+        val result = ArrayList<TheCatCategoryResponseItem>()
+        for (c in _selectedCategories.value!!)
+        {
+            if (c.name == value.name) {
+                continue
+            }
+            result.add(c)
+        }
+        _selectedCategories.value = result
+        resetSearchItems()
     }
 }
