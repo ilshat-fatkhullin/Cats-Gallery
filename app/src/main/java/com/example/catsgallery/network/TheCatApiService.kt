@@ -7,8 +7,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val BASE_URL = "https://api.thecatapi.com/v1/images/"
-enum class TheCatApiFilter(val value: String) { SHOW_RENT("rent"), SHOW_BUY("buy"), BENG("beng") }
+private const val BASE_URL = "https://api.thecatapi.com/v1/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -20,13 +19,16 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface TheCatApiService {
-    @GET("search")
+    @GET("images/search")
     suspend fun getSearchItems(@Query("api_key") apiKey: String,
                                @Query("page") page: Int,
                                @Query("limit") limit: Int,
-                               @Query("breed_ids") type: String): List<TheCatSearchResponseItem>
+                               @Query("category_ids") categoryIds: List<Int>): List<TheCatSearchResponseItem>
+
+    @GET("categories")
+    suspend fun getCategories(): List<TheCatCategoryResponseItem>
 }
 
-object MarsApi {
+object TheCatApi {
     val retrofitService : TheCatApiService by lazy { retrofit.create(TheCatApiService::class.java) }
 }

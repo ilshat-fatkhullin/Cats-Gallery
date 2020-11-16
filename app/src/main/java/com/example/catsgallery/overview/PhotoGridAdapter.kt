@@ -1,4 +1,4 @@
-package com.example.catsgallery.network
+package com.example.catsgallery.overview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,11 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.catsgallery.databinding.GridViewItemBinding
+import com.example.catsgallery.network.TheCatSearchResponseItem
 
-class PhotoGridAdapter(val onClickListener: OnClickListener) :
-    ListAdapter<TheCatSearchResponseItem, PhotoGridAdapter.MarsPropertyViewHolder>(DiffCallback) {
+class PhotoGridAdapter(private val onClickListener: OnClickListener) :
+    ListAdapter<TheCatSearchResponseItem, PhotoGridAdapter.TheCatSearchResponseViewHolder>(
+        DiffCallback
+    ) {
 
-    class MarsPropertyViewHolder(private var binding: GridViewItemBinding) :
+    class TheCatSearchResponseViewHolder(private var binding: GridViewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(theCatSearchResponseItem: TheCatSearchResponseItem) {
             binding.property = theCatSearchResponseItem
@@ -37,16 +40,18 @@ class PhotoGridAdapter(val onClickListener: OnClickListener) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): MarsPropertyViewHolder {
-        return MarsPropertyViewHolder(GridViewItemBinding.inflate(LayoutInflater.from(parent.context)))
+    ): TheCatSearchResponseViewHolder {
+        return TheCatSearchResponseViewHolder(
+            GridViewItemBinding.inflate(LayoutInflater.from(parent.context))
+        )
     }
 
-    override fun onBindViewHolder(holder: MarsPropertyViewHolder, position: Int) {
+    override fun onBindViewHolder(holderSearchResponse: TheCatSearchResponseViewHolder, position: Int) {
         val marsProperty = getItem(position)
-        holder.itemView.setOnClickListener {
+        holderSearchResponse.itemView.setOnClickListener {
             onClickListener.onClick(marsProperty)
         }
-        holder.bind(marsProperty)
+        holderSearchResponse.bind(marsProperty)
     }
 
     class OnClickListener(val clickListener: (theCatSearchResponseItem: TheCatSearchResponseItem) -> Unit) {
